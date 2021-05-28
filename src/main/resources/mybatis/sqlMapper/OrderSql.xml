@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mir.mybatis.mapper.OrderMapper">
+    <select id="selectOrderById" resultType="com.mir.mybatis.vo.OrderVO" parameterType="String">
+        <![CDATA[
+        SELECT ORDER_ID
+             , ORDER_DT
+             , DESTINATION
+             , STATUS
+             , CUST_ID
+        FROM ORDER_INFO
+        WHERE ORDER_ID = #{orderId}
+        ]]>
+    </select>
+
+    <insert id="insertOrder" parameterType="com.mir.mybatis.vo.OrderVO">
+        INSERT INTO ORDER_INFO
+        VALUES
+        (
+            #{orderId}
+        , TO_CHAR(SYSDATE, 'YYYYMMDD')
+        , #{orderMode}
+        , #{custId}
+        , #{orderStatus}
+        )
+    </insert>
+
+    <delete id="deleteOrder" parameterType="String">
+        DELETE FROM ORDER_INFO
+        WHERE ORDER_ID = #{orderId}
+    </delete>
+
+    <select id="selectOrdersByCustId" resultType="com.mir.mybatis.vo.OrderVO" parameterType="String">
+        <![CDATA[
+        SELECT O.ORDER_ID
+             , O.ORDER_DT
+             , O.DESTINATION
+             , O.STATUS
+             , O.PRICE
+        FROM ORDER_INFO O
+        JOIN CUSTOMER C
+        ON O.CUST_ID = C.CUST_ID
+        WHERE C.CUST_NM = #{custNm}
+        ]]>
+    </select>
+
+</mapper>
